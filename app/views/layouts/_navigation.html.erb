@@ -9,23 +9,22 @@
 </div>
 
 <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-  <%= nav_link('Pricing', main_app.pricing_path) %>
-  
-  <% if user_signed_in? %>
-    <ul class='nav navbar-nav'>
-      <%= nav_link "Agents", main_app.agents_path do %>
-        <ul class='dropdown-menu' role='menu'>
-          <%= nav_link icon_tag('glyphicon-plus') + " New Agent", main_app.new_agent_path %>
-          <%= nav_link icon_tag('glyphicon-refresh') + " Run event propagation", main_app.propagate_agents_path, method: 'post' %>
-          <%= nav_link icon_tag('glyphicon-random') + " View Diagram", main_app.diagram_path %>
-        </ul>
-      <% end %>
-      <%= nav_link "Scenarios", main_app.scenarios_path %>
-      <%= nav_link "Events", main_app.events_path %>
-      <%= nav_link "Credentials", main_app.user_credentials_path %>
-      <%= nav_link "Services", main_app.services_path %>
-    </ul>
-  <% end %>
+  <ul class='nav navbar-nav'>
+    <%= nav_link('Pricing', main_app.pricing_path) %>
+    <% if user_signed_in? %>
+    <%= nav_link "Agents", main_app.agents_path do %>
+      <ul class='dropdown-menu' role='menu'>
+        <%= nav_link icon_tag('glyphicon-plus') + " New Agent", main_app.new_agent_path %>
+        <%= nav_link icon_tag('glyphicon-refresh') + " Run event propagation", main_app.propagate_agents_path, method: 'post' %>
+        <%= nav_link icon_tag('glyphicon-random') + " View Diagram", main_app.diagram_path %>
+      </ul>
+    <% end %>
+    <%= nav_link "Scenarios", main_app.scenarios_path %>
+    <%= nav_link "Events", main_app.events_path %>
+    <%= nav_link "Credentials", main_app.user_credentials_path %>
+    <%= nav_link "Services", main_app.services_path %>
+    <% end %>
+  </ul>
   
   <ul class="nav navbar-nav navbar-right">
     <% if user_signed_in? %>
