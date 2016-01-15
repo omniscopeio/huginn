@@ -7,7 +7,7 @@
           <h4><%= plan_price(plan) %></h4>
           <div class="call-to-action">
             <% if @subscription.nil? %>
-              <%= link_to Koudoku.free_trial? ? 'Start Trial' : 'Sign Up', koudoku.new_subscription_path(plan: plan.id), class: "btn btn-success btn-large" %>
+              <%= link_to Koudoku.free_trial? ? 'Start Trial' : 'Sign Up', new_subscription_path(plan: plan.id), class: "btn btn-success btn-large" %>
             <% elsif @subscription.persisted? %>
               <% if @subscription.plan == plan %>
                 <%= form_for @subscription, url: owner_subscription_path(@owner, @subscription) do |f| %>
@@ -34,7 +34,7 @@
     </li>
   <% end %>
 
-  <li class="span3 social-proof">
-    <%= render 'koudoku/subscriptions/social_proof' %>
-  </li>
+  <!--<li class="span3 social-proof">-->
+  <!--  <%= render 'koudoku/subscriptions/social_proof' %>-->
+  <!--</li>-->
 </ul>

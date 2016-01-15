@@ -1,0 +1,23 @@
+
+ul.koudoku-pricing-table {
+  list-style: none;
+    
+  & > li {
+    display: inline-block;
+    margin-bottom: 20px;
+    margin-left: 20px
+  }
+    
+  .thumbnail {
+    background-color: inherit;
+    margin-bottom: 0;
+  }
+  
+  li.plan {
+    margin-top: 33px;
+    margin-left: -5px;
+  }
+  ul.features {
+    padding: 0;
+  }
+}

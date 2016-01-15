@@ -5,7 +5,7 @@ class CreateDefaultPlans < ActiveRecord::Migration
       price: 0,
       interval: 'month',
       stripe_id: 'free-plan',
-      features: ['Unlimited Agents', 'Unlimited Scenarios', 'Unlimited Events', 'Shared Public Workers'].join("\n\n"),
+      features: ['Unlimited Agents', 'Unlimited Scenarios', 'Unlimited Events', 'Shared Public Worker'].join("\n\n"),
       display_order: 1
     })
 
@@ -14,7 +14,7 @@ class CreateDefaultPlans < ActiveRecord::Migration
       price: 3.00,
       interval: 'month',
       stripe_id: 'hobby-plan',
-      features: ['Unlimited Agents', 'Unlimited Scenarios', 'Unlimited Events', 'Semi-private Workers'].join("\n\n"),
+      features: ['Unlimited Agents', 'Unlimited Scenarios', 'Unlimited Events', 'Semi-Dedicated Worker'].join("\n\n"),
       display_order: 2
     })
 
