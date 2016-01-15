@@ -76,13 +76,19 @@
 
         <hr>
         <h3>Subscription</h3>
-        <%= link_to("Manage my subscription", koudoku.owner_subscriptions_path(current_user)) %>
+        <%  @subscription = current_user.subscription %>
+        <% if @subscription.plan.present? %>
+          <p>You're currently subscribed to the <%= @subscription.plan.name %> plan at <%= plan_price(@subscription.plan) %>. <%= link_to 'Choose Another Plan', koudoku.edit_owner_subscription_path(current_user, @subscription) %></p>
+          <p>You can also <%= link_to 'downgrade to the Free plan', koudoku.cancel_owner_subscription_path(current_user, @subscription), method: :post %>.</p>
+        <% else %>
+          <p>You are not subscribed to a paid plan. <%= link_to 'Choose A Plan', koudoku.edit_owner_subscription_path(current_user, @subscription) %></p>
+        <% end %>
+        <p>Unhappy? <%= link_to "Close your account", registration_path(resource_name), data: { confirm: "Are you sure?" }, method: :delete %></p>
+        
+        <h3>Payment Information</h3>
+        <p>The card on file for your account ends with <%= @subscription.last_four %>.</p>
+        <%= link_to 'Update Payment Information', koudoku.edit_owner_subscription_path(current_user, @subscription, update: 'card') %>
 
-        <h3>Cancel my account</h3>
-
-        <p>Unhappy? <%= link_to "Cancel my account", registration_path(resource_name), data: { confirm: "Are you sure?" }, method: :delete %></p>
-
-        <%= link_to "Back", :back %>
       </div>
     </div>
   </div>

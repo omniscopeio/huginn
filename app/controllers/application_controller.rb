@@ -5,7 +5,8 @@ class ApplicationController < ActionController::Base
   before_action :configure_permitted_parameters, if: :devise_controller?
 
   helper :all
-
+  helper Koudoku::ApplicationHelper
+  
   def redirect_back(fallback_path, *args)
     redirect_to :back, *args
   rescue ActionController::RedirectBackError
