@@ -5,6 +5,8 @@ Huginn::Application.routes.draw do
   scope module: 'koudoku' do
     get 'pricing' => 'subscriptions#index', as: 'pricing'
   end
+  
+  get '/.well-known/acme-challenge/:id' => 'ssl_verification#show'
 
   resources :agents do
     member do

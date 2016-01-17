@@ -135,7 +135,7 @@ Devise.setup do |config|
   # Options to be passed to the created cookie. For instance, you can set
   # secure: true in order to force SSL only cookies.
   if Rails.env.production?
-    config.rememberable_options = { secure: true }
+    config.rememberable_options = { secure: ENV["FORCE_SSL"] == 'true' }
   else
     config.rememberable_options = { }
   end
