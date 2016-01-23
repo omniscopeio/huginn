@@ -2,7 +2,9 @@
 <script type="text/javascript" src="https://js.stripe.com/v2/"></script>
 <% end %>
 
-<%= form_for @subscription, url: url, html: {id: 'payment-form', class: 'form-horizontal'} do |f| %>
+
+
+<%= form_for @subscription, url: url, html: {id: 'payment-form', class: 'form-horizontal', autocomplete: 'on'} do |f| %>
 
   <fieldset>
 
@@ -11,23 +13,21 @@
     <div class="control-group">
       <label class="control-label">Card Number</label>
       <div class="controls">
-        <input type="number" size="20" autocomplete="off" class="card-number"/>
+        <input type="tel" size="20" class="card-number"/>
       </div>
     </div>
 
     <div class="control-group">
-      <label class="control-label">Expiration (MM/YYYY)</label>
+      <label class="control-label">Expiration (MM/YY)</label>
       <div class="controls">
-        <input type="number" size="2" class="card-expiry-month input-mini"/>
-        <span> / </span>
-        <input type="number" size="4" class="card-expiry-year input-mini"/>
+        <input type="tel" size="6" class="card-expiry"/>
       </div>
     </div>
 
     <div class="control-group">
       <label class="control-label">CVC</label>
       <div class="controls">
-        <input type="number" size="4" autocomplete="off" class="card-cvc input-small"/>
+        <input type="tel" size="4" autocomplete="off" class="card-cvc"/>
       </div>
     </div>
 
@@ -48,6 +48,12 @@
   </div>
 
 <% end %>
+
+<script type="text/javascript">
+  $('input.card-number').payment('formatCardNumber');
+  $('input.card-expiry').payment('formatCardExpiry');
+  $('input.card-cvc').payment('formatCardCVC');
+</script>
 
 <script type="text/javascript">
 
@@ -87,8 +93,7 @@
       Stripe.createToken({
           number: $('.card-number').val(),
           cvc: $('.card-cvc').val(),
-          exp_month: $('.card-expiry-month').val(),
-          exp_year: $('.card-expiry-year').val()
+          exp: $('.card-expiry').val()
       }, stripeResponseHandler);
 
       // prevent the form from submitting with the default action

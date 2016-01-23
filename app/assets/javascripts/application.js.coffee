@@ -6,6 +6,7 @@
 #= require json2
 #= require jquery.json-editor
 #= require jquery.serializeObject
+#= require jquery.payment
 #= require latlon_and_geo
 #= require spectrum
 #= require_tree ./components
