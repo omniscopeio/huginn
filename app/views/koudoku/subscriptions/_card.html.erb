@@ -2,14 +2,13 @@
 <script type="text/javascript" src="https://js.stripe.com/v2/"></script>
 <% end %>
 
-
+<div class="page-header">
+    <h2><%= title %></h2>
+</div>
 
 <%= form_for @subscription, url: url, html: {id: 'payment-form', class: 'form-horizontal', autocomplete: 'on'} do |f| %>
 
   <fieldset>
-
-    <legend><%= title %></legend>
-    
     <div class="control-group">
       <label class="control-label">Card Number</label>
       <div class="controls">
@@ -33,9 +32,8 @@
 
     <div class="alert alert-error payment-errors"></div>
     <%= f.hidden_field :plan_id %>
-    
   </fieldset>
-
+  <br />
   <div class="control-group">
     <div class="controls">
       <% if Koudoku.free_trial? %>
