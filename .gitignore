@@ -25,5 +25,4 @@ deployment/cookbooks
 .ruby-gemset
 .ruby-version
 manifest.yml
-config/unicorn.rb
 db/schema.rb
