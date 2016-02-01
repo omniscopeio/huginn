@@ -2,6 +2,7 @@ class ServicesController < ApplicationController
   include SortableTable
 
   before_action :upgrade_warning, only: :index
+  before_action :enforce_paid_plan!
 
   def index
     set_table_sort sorts: %w[provider name global], default: { provider: :asc }

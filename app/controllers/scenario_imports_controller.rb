@@ -1,4 +1,6 @@
 class ScenarioImportsController < ApplicationController
+  before_action :enforce_paid_plan!
+  
   def new
     @scenario_import = ScenarioImport.new(:url => params[:url])
   end

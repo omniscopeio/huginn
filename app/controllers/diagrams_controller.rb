@@ -1,4 +1,6 @@
 class DiagramsController < ApplicationController
+  before_action :enforce_paid_plan!
+  
   def show
     if params[:scenario_id].present?
       @scenario = current_user.scenarios.find(params[:scenario_id])

@@ -13,6 +13,19 @@ module ApplicationHelper
       raise "Unrecognized icon name: #{name}"
     end
   end
+  
+  def bootstrap_class(flash_name)
+    case flash_name.to_sym
+    when :notice
+      "success"
+    when :alert
+      "danger"
+    when :info
+      "info"
+    when :warning
+      "warning"
+    end
+  end
 
   def nav_link(name, path, options = {}, &block)
     content = link_to(name, path, options)
