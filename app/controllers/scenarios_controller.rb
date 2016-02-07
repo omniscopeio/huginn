@@ -1,6 +1,6 @@
 class ScenariosController < ApplicationController
   include SortableTable
-  before_action :enforce_paid_plan!
+  before_action :enforce_paid_plan!, except: :export
   skip_before_action :authenticate_user!, only: :export
 
   def index

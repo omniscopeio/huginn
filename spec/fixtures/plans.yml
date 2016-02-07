@@ -1,0 +1,13 @@
+hobby_plan:
+  name: Hobby
+  stripe_id: hobby-plan
+  price: 3.0
+  interval: month
+  features: |-
+    Fun
+    
+    Exciting
+    
+    Brilliant
+  highlight: 
+  display_order: 1

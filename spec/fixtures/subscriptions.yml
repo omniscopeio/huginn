@@ -1,0 +1,17 @@
+bob_subscription:
+  user: bob
+  stripe_id: cus_123doreymi
+  plan: hobby_plan
+  last_four: '1111'
+  coupon_id: 
+  card_type: undefined
+  current_price: 3.0
+  
+jane_subscription:
+  user: jane
+  stripe_id: cus_456youandme
+  plan: hobby_plan
+  last_four: '1111'
+  coupon_id: 
+  card_type: undefined
+  current_price: 3.0
