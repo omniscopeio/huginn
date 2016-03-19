@@ -19,6 +19,9 @@ describe Admin::UsersController do
     end
 
     it "allows to delete a user" do
+      any_instance_of(Subscription) do |klass|
+        stub(klass).cancel_subscription! { true }
+      end
       visit admin_users_path
       find(:css, "a[href='/admin/users/#{users(:bob).id}']").click
       expect(page).to have_text("User 'bob' was deleted.")
