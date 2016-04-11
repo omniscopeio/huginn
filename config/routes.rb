@@ -1,10 +1,21 @@
 Huginn::Application.routes.draw do
   
   # Added by Koudoku.
-  mount Koudoku::Engine, at: 'koudoku'
-  scope module: 'koudoku' do
+  # mount Koudoku::Engine, at: 'koudoku'
+  # scope module: 'koudoku' do
     get 'pricing' => 'subscriptions#index', as: 'pricing'
+  # end
+
+  resources :subscriptions, only: [:new]
+  resources :owner do
+    resources :subscriptions do
+      member do
+        post :cancel
+      end
+    end
   end
+
+  mount StripeEvent::Engine => '/webhooks'
   
   get '/.well-known/acme-challenge/:id' => 'ssl_verification#show'
 

@@ -26,7 +26,7 @@ class ApplicationController < ActionController::Base
   end
   
   def enforce_paid_plan!
-    redirect_to(main_app.pricing_path, flash: { warning: 'Please pick a plan first' }) unless current_user && current_user.subscription.present?
+    redirect_to(pricing_path, flash: { warning: 'Please pick a plan first' }) unless current_user && current_user.subscription.present?
   end
 
   def upgrade_warning

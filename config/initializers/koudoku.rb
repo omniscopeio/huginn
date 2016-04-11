@@ -1,3 +1,4 @@
+require_relative '../../lib/koudoku'
 Koudoku.setup do |config|
   config.subscriptions_owned_by = :user
   config.stripe_publishable_key = ENV['STRIPE_PUBLISHABLE_KEY']
