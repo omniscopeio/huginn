@@ -1,0 +1,1 @@
+class PolicyNotFoundError < NameError; end

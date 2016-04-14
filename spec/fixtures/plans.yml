@@ -1,5 +1,5 @@
 hobby_plan:
-  name: Hobby
+  name: Hobby Plan 3 (deprecated)
   stripe_id: hobby-plan
   price: 3.0
   interval: month
@@ -11,3 +11,29 @@ hobby_plan:
     Brilliant
   highlight: 
   display_order: 1
+
+hobby_standard_7:
+  name: Hobby Standard 7
+  stripe_id: hobby-standard-7
+  price: 7.0
+  interval: month
+  features: |-
+    Fun
+
+    Exciting
+  highlight:
+  display_order: 1
+
+hobby_fast_11:
+  name: Hobby Fast 11
+  stripe_id: hobby-fast-11
+  price: 11.0
+  interval: month
+  features: |-
+    Fun
+
+    Exciting
+
+    Brilliant
+  highlight: true
+  display_order: 2

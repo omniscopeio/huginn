@@ -1,10 +1,6 @@
 Huginn::Application.routes.draw do
   
-  # Added by Koudoku.
-  # mount Koudoku::Engine, at: 'koudoku'
-  # scope module: 'koudoku' do
-    get 'pricing' => 'subscriptions#index', as: 'pricing'
-  # end
+  get 'pricing' => 'subscriptions#index', as: 'pricing'
 
   resources :subscriptions, only: [:new]
   resources :owner do

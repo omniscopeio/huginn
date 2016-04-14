@@ -1,5 +1,7 @@
 # Huginn is designed to be a multi-User system.  Users have many Agents (and Events created by those Agents).
 class User < ActiveRecord::Base
+  include Authorizable
+
   has_one :subscription, dependent: :destroy
   
   DEVISE_MODULES = [:database_authenticatable, :registerable,
