@@ -1,4 +1,4 @@
-<% content_for :koudoku do %>
+<% content_for :stripe_js do %>
 <script type="text/javascript" src="https://js.stripe.com/v2/"></script>
 <% end %>
 
@@ -10,23 +10,23 @@
 
   <fieldset>
     <div class="control-group">
-      <label class="control-label">Card Number</label>
+      <label class="control-label" for="card-number">Card Number</label>
       <div class="controls">
-        <input type="tel" size="20" class="card-number"/>
+        <input type="tel" size="20" class="card-number" id="card-number"/>
       </div>
     </div>
 
     <div class="control-group">
-      <label class="control-label">Expiration (MM/YY)</label>
+      <label class="control-label" for="card-expiry">Expiration (MM/YY)</label>
       <div class="controls">
-        <input type="tel" size="6" class="card-expiry"/>
+        <input type="tel" size="6" class="card-expiry" id="card-expiry"/>
       </div>
     </div>
 
     <div class="control-group">
-      <label class="control-label">CVC</label>
+      <label class="control-label" for="card-cvc">CVC</label>
       <div class="controls">
-        <input type="tel" size="4" autocomplete="off" class="card-cvc"/>
+        <input type="tel" size="4" autocomplete="off" class="card-cvc" id="card-cvc"/>
       </div>
     </div>
 

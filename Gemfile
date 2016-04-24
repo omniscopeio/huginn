@@ -120,7 +120,7 @@ gem 'sass-rails',   '~> 5.0.3'
 gem 'select2-rails', '~> 3.5.4'
 gem 'spectrum-rails'
 gem 'string-scrub'	# for ruby <2.1
-gem 'stripe'
+gem 'stripe' #consider stipe-rails
 gem 'stripe_event'
 gem 'therubyracer', '~> 0.12.2'
 gem 'typhoeus', '~> 0.6.3'
