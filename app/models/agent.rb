@@ -14,6 +14,7 @@ class Agent < ActiveRecord::Base
   include LiquidDroppable
   include DryRunnable
   include SortableEvents
+  include Permitable
 
   markdown_class_attributes :description, :event_description
 

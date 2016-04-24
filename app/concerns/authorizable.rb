@@ -12,4 +12,8 @@ module Authorizable
   end
 
   alias allowed_to? can?
+
+  def cannot?(policy_symbol)
+    !can?(policy_symbol)
+  end
 end

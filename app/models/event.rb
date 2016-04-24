@@ -87,7 +87,7 @@ class Event < ActiveRecord::Base
 
   def possibly_propagate
     #immediately schedule agents that want immediate updates
-    propagate_ids = agent.receivers.where(:propagate_immediately => true).pluck(:id)
+    propagate_ids = agent.receivers.select{|a| a.propagate_immediately? }.collect(&:id)
     Agent.receive!(:only_receivers => propagate_ids) unless propagate_ids.empty?
   end
 end

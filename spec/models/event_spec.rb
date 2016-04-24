@@ -132,6 +132,63 @@ describe Event do
     end
   end
 
+  describe "after create" do
+    describe "when the user's plan supports propagation" do
+      before do
+        any_instance_of(User) do |klass|
+          stub(klass).can?(:propagate_immediately) { true }
+        end
+      end
+
+      it "triggers immediate propagation for elegible agents" do
+        source_agent = agents(:bob_weather_agent)
+        agent = agents(:bob_rain_notifier_agent)
+        agent.propagate_immediately = true
+        agent.save
+        expected_propagate_ids = [agent.id]
+        mock(Agent).receive!(only_receivers: expected_propagate_ids)
+
+        event = Event.new
+        event.agent = source_agent
+        event.save!
+      end
+
+      it "does not trigger immediate propagation for inelegible agents" do
+        source_agent = agents(:bob_weather_agent)
+        agent = agents(:bob_rain_notifier_agent)
+        agent.propagate_immediately = false
+        agent.save
+        expected_propagate_ids = []
+        stub(Agent).receive!(only_receivers: expected_propagate_ids) { fail("Should not be called") }
+
+        event = Event.new
+        event.agent = source_agent
+        event.save!
+      end
+    end
+
+    describe "when the user's plan does not support propagation" do
+      before do
+        any_instance_of(User) do |klass|
+          stub(klass).can?(:propagate_immediately) { false }
+        end
+      end
+
+      it "does not trigger immediate propagation for elegible agents" do
+        source_agent = agents(:bob_weather_agent)
+        agent = agents(:bob_rain_notifier_agent)
+        agent.propagate_immediately = true
+        agent.save
+        expected_propagate_ids = [agent.id]
+        stub(Agent).receive!(only_receivers: expected_propagate_ids) { fail("Should not be called") }
+
+        event = Event.new
+        event.agent = source_agent
+        event.save!
+      end
+    end
+  end
+
   describe "caches" do
     describe "when an event is created" do
       it "updates a counter cache on agent" do
@@ -154,7 +211,7 @@ describe Event do
         agents(:jane_weather_agent).update_attribute :last_event_at, 2.days.ago
 
         expect {
-          event.update_attribute :payload, { 'hello' => 'world' }
+          event.update_attribute :payload, {'hello' => 'world'}
         }.not_to change { agents(:jane_weather_agent).reload.last_event_at }
       end
     end
