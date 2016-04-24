@@ -64,7 +64,11 @@ Huginn::Application.routes.draw do
     resource :diagram, :only => [:show]
   end
 
-  resources :user_credentials, :except => :show
+  resources :user_credentials, :except => :show do
+    collection do
+      post :import
+    end
+  end
 
   resources :services, :only => [:index, :destroy] do
     member do
@@ -79,6 +83,7 @@ Huginn::Application.routes.draw do
     collection do
       delete :destroy_failed
       delete :destroy_all
+      post :retry_queued
     end
   end
 
