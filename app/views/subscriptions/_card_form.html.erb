@@ -36,7 +36,7 @@
   <br />
   <div class="control-group">
     <div class="controls">
-      <% if Koudoku.free_trial? %>
+      <% if @subscription.plan.free_trial? %>
         <button type="submit" class="btn btn-primary submit-button">Save Billing Information</button>
       <% else %>
         <button type="submit" class="btn btn-primary submit-button">Upgrade Your Account</button>

@@ -4,63 +4,7 @@ class SubscriptionsController < ApplicationController
   before_filter :load_subscription, only: [:show, :cancel, :edit, :update]
   before_filter :load_plans, only: [:index, :edit]
 
-  def load_plans
-    @plans = ::Plan.order(:price)
-  end
-
-  def unauthorized
-    render status: 401, template: "koudoku/subscriptions/unauthorized"
-    false
-  end
-
-  def load_owner
-    unless params[:owner_id].nil?
-      if current_user.present?
-
-        # we need to try and look this owner up via the find method so that we're
-        # taking advantage of any override of the find method that would be provided
-        # by older versions of friendly_id. (support for newer versions default behavior
-        # below.)
-        searched_owner = current_user.class.find(params[:owner_id]) rescue nil
-
-        # if we couldn't find them that way, check whether there is a new version of
-        # friendly_id in place that we can use to look them up by their slug.
-        # in christoph's words, "why?!" in my words, "warum?!!!"
-        # (we debugged this together on skype.)
-        if searched_owner.nil? && current_user.class.respond_to?(:friendly)
-          searched_owner = current_user.class.friendly.find(params[:owner_id]) rescue nil
-        end
-
-        if current_user.try(:id) == searched_owner.try(:id)
-          @owner = current_user
-        else
-          return unauthorized
-        end
-      else
-        return unauthorized
-      end
-    end
-  end
-
-  def no_owner?
-    @owner.nil?
-  end
-
-  def load_subscription
-    ownership_attribute = :"#{Koudoku.subscriptions_owned_by}_id"
-    @subscription = ::Subscription.where(ownership_attribute => current_user.id).find_by_id(params[:id])
-    return @subscription.present? ? @subscription : unauthorized
-  end
-
-  def redirect_to_sign_up
-    # this is a Devise default variable and thus should not change its name
-    # when we change subscription owners from :user to :company
-    session["user_return_to"] = new_subscription_path(plan: params[:plan])
-    redirect_to new_registration_path(Koudoku.subscriptions_owned_by.to_s)
-  end
-
   def index
-
     # don't bother showing the index if they've already got a subscription.
     if current_user and current_user.subscription.present?
       redirect_to edit_owner_subscription_path(current_user, current_user.subscription)
@@ -80,29 +24,14 @@ class SubscriptionsController < ApplicationController
 
   def new
     if no_owner?
-
-      if defined?(Devise)
-
-        # by default these methods support devise.
-        if current_user
-          redirect_to new_owner_subscription_path(current_user, plan: params[:plan])
-        else
-          redirect_to_sign_up
-        end
-
+      if current_user
+        redirect_to new_owner_subscription_path(current_user, plan: params[:plan])
       else
-        raise "This feature depends on Devise for authentication."
+        redirect_to_sign_up
       end
-
     else
       @subscription = ::Subscription.new
       @subscription.plan = ::Plan.find(params[:plan])
-    end
-  end
-
-  def show_existing_subscription
-    if @owner.subscription.present?
-      redirect_to owner_subscription_path(@owner, @owner.subscription)
     end
   end
 
@@ -144,6 +73,57 @@ class SubscriptionsController < ApplicationController
   end
 
   private
+
+  def unauthorized
+    render status: 401, template: "subscriptions/unauthorized"
+    false
+  end
+
+  def no_owner?
+    @owner.nil?
+  end
+
+  def redirect_to_sign_up
+    # this is a Devise default variable and thus should not change its name
+    # when we change subscription owners from :user to :company
+    session["user_return_to"] = new_subscription_path(plan: params[:plan])
+    redirect_to new_registration_path(Koudoku.subscriptions_owned_by.to_s)
+  end
+
+  def load_owner
+    unless params[:owner_id].nil?
+      if current_user.present?
+
+        searched_owner = User.find_by_id(params[:owner_id])
+        if searched_owner.present?
+          @owner = current_user
+        else
+          return unauthorized
+        end
+      else
+        return unauthorized
+      end
+    end
+  end
+
+
+  def load_plans
+    @plans = ::Plan.order(:price)
+  end
+
+  def load_subscription
+    ownership_attribute = :"#{Koudoku.subscriptions_owned_by}_id"
+    @subscription = ::Subscription.where(ownership_attribute => current_user.id).find_by_id(params[:id])
+    return @subscription.present? ? @subscription : unauthorized
+  end
+
+
+  def show_existing_subscription
+    if @owner.subscription.present?
+      redirect_to owner_subscription_path(@owner, @owner.subscription)
+    end
+  end
+
   def subscription_params
 
     # If strong_parameters is around, use that.

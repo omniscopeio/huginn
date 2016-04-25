@@ -3,6 +3,7 @@ hobby_plan:
   stripe_id: hobby-plan
   price: 3.0
   interval: month
+  trial_length: 60
   features: |-
     Fun
     
@@ -17,6 +18,7 @@ hobby_standard_7:
   stripe_id: hobby-standard-7
   price: 7.0
   interval: month
+  trial_length: 30
   features: |-
     Fun
 
@@ -29,6 +31,7 @@ hobby_fast_11:
   stripe_id: hobby-fast-11
   price: 11.0
   interval: month
+  trial_length: 30
   features: |-
     Fun
 

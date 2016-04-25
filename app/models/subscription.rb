@@ -145,7 +145,7 @@ class Subscription < ActiveRecord::Base
       if persisted?
         "Upgrade"
       else
-        if Koudoku.free_trial?
+        if plan.free_trial?
           "Start Trial"
         else
           "Upgrade"

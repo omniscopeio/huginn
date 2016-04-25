@@ -10,7 +10,7 @@ describe "Sign up for a new account", js: true do
         end
 
         within(".plan-primary") do
-          click_on("Start Trial")
+          click_on("Start 30-day Free Trial")
         end
 
         fill_in("Email", with: "pricing-start@exmaple.com")
@@ -39,7 +39,7 @@ describe "Sign up for a new account", js: true do
         end
 
         within(".plan-primary") do
-          click_on("Start Trial")
+          click_on("Start 30-day Free Trial")
         end
 
         fill_in("Email", with: "pricing-start@exmaple.com")

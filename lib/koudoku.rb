@@ -9,9 +9,6 @@ module Koudoku
   
   mattr_accessor :stripe_secret_key
   @@stripe_secret_key = nil
-  
-  mattr_accessor :free_trial_length
-  @@free_trial_length = nil
 
   mattr_accessor :prorate
   @@prorate = true
@@ -53,12 +50,7 @@ module Koudoku
   def self.owner_class
     Koudoku.subscriptions_owned_by.to_s.classify.constantize
   end
-  
-  def self.free_trial?
-    free_trial_length.to_i > 0
-  end
-  
-  
+
   #
   # STRIPE_EVENT section
   #
