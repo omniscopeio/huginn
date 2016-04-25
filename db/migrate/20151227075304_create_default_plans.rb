@@ -46,8 +46,6 @@ class CreateDefaultPlans < ActiveRecord::Migration
   end
   
   class Subscription < ActiveRecord::Base
-    include Koudoku::Subscription
-  
     belongs_to :user
     belongs_to :coupon
   end

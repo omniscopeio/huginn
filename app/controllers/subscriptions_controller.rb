@@ -105,7 +105,11 @@ class SubscriptionsController < ApplicationController
 
 
   def load_active_plans
-    @plans = Plan.where(active: true).order(:display_order)
+    if current_user.present? && current_user.subscription
+      @plans = Plan.where("active = ? OR id = ?", true, current_user.subscription.plan.id).order(:display_order)
+    else
+      @plans = Plan.where(active: true).order(:display_order)
+    end
   end
 
   def load_subscription

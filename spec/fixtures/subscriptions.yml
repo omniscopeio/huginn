@@ -1,7 +1,7 @@
 bob_subscription:
   user: bob
   stripe_id: cus_123doreymi
-  plan: hobby_plan
+  plan: hobby_fast_11
   last_four: '1111'
   coupon_id: 
   card_type: undefined
@@ -10,7 +10,7 @@ bob_subscription:
 jane_subscription:
   user: jane
   stripe_id: cus_456youandme
-  plan: hobby_plan
+  plan: hobby_fast_11
   last_four: '1111'
   coupon_id: 
   card_type: undefined

@@ -8,6 +8,15 @@ describe SubscriptionsController do
       get :index
       expect(assigns(:plans).map(&:stripe_id)).not_to include(inactive_plan.stripe_id)
     end
+
+    it "returns an inactive plan if the current user is subscribed to that plan" do
+      inactive_plan = plans(:hobby_plan)
+      user = users(:bob)
+      user.subscription.update_column(:plan_id, inactive_plan.id)
+      sign_in user
+      get :index
+      expect(assigns(:plans).map(&:stripe_id)).to include(inactive_plan.stripe_id)
+    end
   end
 
   describe "GET edit" do
