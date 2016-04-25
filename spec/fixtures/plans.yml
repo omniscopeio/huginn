@@ -12,6 +12,7 @@ hobby_plan:
     Brilliant
   highlight: 
   display_order: 1
+  active: false
 
 hobby_standard_7:
   name: Hobby Standard 7
@@ -25,6 +26,7 @@ hobby_standard_7:
     Exciting
   highlight:
   display_order: 1
+  active: true
 
 hobby_fast_11:
   name: Hobby Fast 11
@@ -40,3 +42,4 @@ hobby_fast_11:
     Brilliant
   highlight: true
   display_order: 2
+  active: true

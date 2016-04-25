@@ -2,16 +2,13 @@ class SubscriptionsController < ApplicationController
   before_filter :load_owner
   before_filter :show_existing_subscription, only: [:index, :new, :create], unless: :no_owner?
   before_filter :load_subscription, only: [:show, :cancel, :edit, :update]
-  before_filter :load_plans, only: [:index, :edit]
+  before_filter :load_active_plans, only: [:index, :edit]
 
   def index
     # don't bother showing the index if they've already got a subscription.
     if current_user and current_user.subscription.present?
       redirect_to edit_owner_subscription_path(current_user, current_user.subscription)
     end
-
-    # Load all plans.
-    @plans = ::Plan.order(:display_order).all
 
     # Don't prep a subscription unless a user is authenticated.
     unless no_owner?
@@ -107,8 +104,8 @@ class SubscriptionsController < ApplicationController
   end
 
 
-  def load_plans
-    @plans = ::Plan.order(:price)
+  def load_active_plans
+    @plans = Plan.where(active: true).order(:display_order)
   end
 
   def load_subscription
