@@ -16,6 +16,8 @@ class Delayed::Job
   scope :failed, -> { where("failed_at IS NOT NULL") }
 end
 
-Delayed::Backend::ActiveRecord.configure do |config|
-  config.reserve_sql_strategy = :default_sql
-end
+# Removed per https://github.com/cantino/huginn/issues/1454
+#
+# Delayed::Backend::ActiveRecord.configure do |config|
+#   config.reserve_sql_strategy = :default_sql
+# end
