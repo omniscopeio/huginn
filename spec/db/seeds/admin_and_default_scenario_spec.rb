@@ -7,6 +7,11 @@ describe Seeder do
   end
 
   describe '.seed' do
+    before do
+      stub.proxy(ENV).[](anything)
+      stub(ENV).[]('DEFAULT_SCENARIO_FILE') { nil }
+    end
+
     it 'imports a default scenario' do
       expect { Seeder.seed }.to change(Agent, :count).by(7)
     end
