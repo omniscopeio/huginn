@@ -453,6 +453,7 @@ describe Agent do
         slow_receiver.sources << sender
         slow_receiver.save!
 
+        sender.reload
         sender.create_event :payload => {"message" => "new payload"}
         expect(sender.events.count).to eq(1)
         expect(im_receiver.events.count).to eq(1)
