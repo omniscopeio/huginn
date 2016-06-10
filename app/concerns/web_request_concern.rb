@@ -96,7 +96,8 @@ module WebRequestConcern
   def faraday
     faraday_options = {
       ssl: {
-        verify: !boolify(options['disable_ssl_verification'])
+        verify: !boolify(options['disable_ssl_verification']),
+        ca_file: '/usr/lib/ssl/certs/ca-certificates.crt'
       }
     }
 
