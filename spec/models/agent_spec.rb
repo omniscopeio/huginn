@@ -423,8 +423,7 @@ describe Agent do
         )
         receiver.propagate_immediately = true
         receiver.user = users(:bob)
-        receiver.sources << sender
-        receiver.save!
+        sender.receivers << receiver
 
         sender.create_event :payload => {"message" => "new payload"}
         expect(sender.events.count).to eq(1)
