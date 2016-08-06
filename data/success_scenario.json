@@ -33,7 +33,7 @@
         }
       },
       "schedule": "every_1d",
-      "keep_events_for": 0,
+      "keep_events_for": 604800,
       "propagate_immediately": false
     },
     {
@@ -82,7 +82,7 @@
         }
       },
       "schedule": "every_1d",
-      "keep_events_for": 0,
+      "keep_events_for": 604800,
       "propagate_immediately": false
     },
     {
@@ -99,7 +99,7 @@
         ],
         "mode": "clean"
       },
-      "keep_events_for": 2592000,
+      "keep_events_for": 604800,
       "propagate_immediately": false
     }
   ],
