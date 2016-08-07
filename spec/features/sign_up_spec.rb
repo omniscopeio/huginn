@@ -19,7 +19,7 @@ describe "Sign up for a new account", js: true do
         fill_in("Password confirmation", with: "s3cretzz")
 
         click_on("Sign up")
-
+        p page.body
         fill_in("Card Number", with: "4242424242424242")
         fill_in("Expiration", with: "#{2.years.from_now.strftime("%m/%y")}")
         fill_in("CVC", with: "123")
@@ -49,6 +49,7 @@ describe "Sign up for a new account", js: true do
 
         click_on("Sign up")
 
+        p page.body
         fill_in("Card Number", with: "4242424242424242")
         fill_in("Expiration", with: "#{2.years.from_now.strftime("%m/%y")}")
         fill_in("CVC", with: "123")
