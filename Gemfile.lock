@@ -66,13 +66,6 @@ GIT
       omniauth-oauth2 (~> 1.1)
 
 PATH
-  remote: ../huginn_lifx_agents
-  specs:
-    huginn_lifx_agents (1.0.0)
-      huginn_agent (~> 0.4.2)
-      omniauth-lifx (~> 1.1.0)
-
-PATH
   remote: vendor/gems/dotenv-2.0.1
   specs:
     dotenv (2.0.1)
@@ -658,7 +651,6 @@ DEPENDENCIES
   httmultiparty (~> 0.3.16)
   httparty (~> 0.13)
   huginn_agent (~> 0.4.0)
-  huginn_lifx_agents!
   huginn_nlp_agents!
   hypdf (~> 1.0.10)
   jquery-rails (~> 3.1.3)
