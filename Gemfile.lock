@@ -45,7 +45,7 @@ GIT
 
 GIT
   remote: git://github.com/omniscopeio/huginn_lifx_agents.git
-  revision: ec5a730c02a70508b16ea502d34fc0aa0f7bb712
+  revision: ec1f30cd6b01734e988d16d7f14671376464b20b
   specs:
     huginn_lifx_agents (1.0.0)
       huginn_agent (~> 0.4.0)
