@@ -1,6 +1,8 @@
 require 'pp'
 class OmniauthCallbacksController < Devise::OmniauthCallbacksController
   def action_missing(name)
+    p "!!!!!!!!!!!!!!!!!! WRONG Lifx action"
+
     case name.to_sym
     when *Devise.omniauth_providers
       option_provider = ServiceOptionProviders::DefaultServiceOptionProvider.new
