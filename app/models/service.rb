@@ -61,8 +61,6 @@ class Service < ActiveRecord::Base
     case omniauth['provider'].to_sym
       when :'37signals'
         { user_id: omniauth['extra']['accounts'][0]['id'], name: omniauth['info']['name'] }
-      when :'lifx'
-        { name: 'LIFX User' }
       else
         { name: omniauth['info']['nickname'] || omniauth['info']['name'] }
     end
