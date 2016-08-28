@@ -24,7 +24,7 @@
         ],
         "message": "Just so you know, it looks like '{{conditions}}' tomorrow in {{location}}"
       },
-      "keep_events_for": 0,
+      "keep_events_for": 2592000,
       "propagate_immediately": false
     },
     {
@@ -52,7 +52,7 @@
         }
       },
       "schedule": "every_1d",
-      "keep_events_for": 0,
+      "keep_events_for": 2592000,
       "propagate_immediately": false
     },
     {
@@ -113,7 +113,7 @@
         }
       },
       "schedule": "every_1d",
-      "keep_events_for": 0,
+      "keep_events_for": 2592000,
       "propagate_immediately": false
     },
     {
