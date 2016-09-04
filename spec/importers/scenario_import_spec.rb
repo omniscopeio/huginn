@@ -41,7 +41,7 @@ describe ScenarioImport do
     {
       :type => "Agents::TriggerAgent",
       :name => "listen for weather",
-      :keep_events_for => 0,
+      :keep_events_for => 7.days,
       :propagate_immediately => true,
       :disabled => false,
       :guid => "a-trigger-agent",
@@ -53,7 +53,7 @@ describe ScenarioImport do
       :type => "Agents::BasecampAgent",
       :name => "Basecamp test",
       :schedule => "every_2m",
-      :keep_events_for => 0,
+      :keep_events_for => 7.days,
       :propagate_immediately => true,
       :disabled => false,
       :guid => "a-basecamp-agent",
@@ -217,7 +217,7 @@ describe ScenarioImport do
           expect(trigger_agent.name).to eq("listen for weather")
           expect(trigger_agent.sources).to eq([weather_agent])
           expect(trigger_agent.schedule).to be_nil
-          expect(trigger_agent.keep_events_for).to eq(0)
+          expect(trigger_agent.keep_events_for).to eq(7.days)
           expect(trigger_agent.propagate_immediately).to be_truthy
           expect(trigger_agent).not_to be_disabled
           expect(trigger_agent.memory).to be_empty
@@ -235,6 +235,7 @@ describe ScenarioImport do
         context "when the schema_version is less than 1" do
           before do
             valid_parsed_weather_agent_data[:keep_events_for] = 2
+            valid_parsed_trigger_agent_data[:keep_events_for] = 3
             valid_parsed_data.delete(:schema_version)
           end
 
@@ -245,7 +246,7 @@ describe ScenarioImport do
             trigger_agent = scenario_import.scenario.agents.find_by(:guid => "a-trigger-agent")
 
             expect(weather_agent.keep_events_for).to eq(2.days)
-            expect(trigger_agent.keep_events_for).to eq(0)
+            expect(trigger_agent.keep_events_for).to eq(3.days)
           end
         end
 
@@ -373,7 +374,7 @@ describe ScenarioImport do
           expect(trigger_agent.name).to eq("listen for weather")
           expect(trigger_agent.sources).to eq([weather_agent])
           expect(trigger_agent.schedule).to be_nil
-          expect(trigger_agent.keep_events_for).to eq(0)
+          expect(trigger_agent.keep_events_for).to eq(7.days)
           expect(trigger_agent.propagate_immediately).to be_truthy
           expect(trigger_agent).not_to be_disabled
           expect(trigger_agent.memory).to be_empty

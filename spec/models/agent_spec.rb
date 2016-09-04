@@ -609,13 +609,13 @@ describe Agent do
         agent.keep_events_for = 5.days.to_i
         expect(agent).to be_valid
         agent.keep_events_for = 0
-        expect(agent).to be_valid
+        expect(agent).not_to be_valid
         agent.keep_events_for = 365.days.to_i
         expect(agent).to be_valid
 
         # Rails seems to call to_i on the input. This guards against future changes to that behavior.
         agent.keep_events_for = "drop table;"
-        expect(agent.keep_events_for).to eq(0)
+        expect(agent.keep_events_for).to eq(0.days)
       end
     end
 
@@ -667,14 +667,6 @@ describe Agent do
             @agent.save!
           }.to change { @event.reload.expires_at }
           expect(@event.expires_at.to_i).to be_within(60 * 61).of(1.days.from_now.to_i) # The larger time is to deal with daylight savings
-        end
-
-        it "nulls out expires_at when keep_events_for is set to 0" do
-          expect {
-            @agent.options[:foo] = "bar"
-            @agent.keep_events_for = 0
-            @agent.save!
-          }.to change { @event.reload.expires_at }.to(nil)
         end
       end
     end
@@ -850,13 +842,8 @@ describe Agent do
     end
 
     describe "when the agent does not have keep_events_for set" do
-      before do
-        expect(agents(:jane_website_agent).keep_events_for).to eq(0)
-      end
-
-      it "does not set expires_at on created events" do
-        event = agents(:jane_website_agent).create_event :payload => { 'hi' => 'there' }
-        expect(event.expires_at).to be_nil
+      it "defaults to seven days" do
+        expect(agents(:jane_website_agent).keep_events_for).to eq(7.days)
       end
     end
   end

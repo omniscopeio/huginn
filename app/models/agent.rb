@@ -30,7 +30,7 @@ class Agent < ActiveRecord::Base
   json_serialize :options, :memory
 
   validates_presence_of :name, :user
-  validates_inclusion_of :keep_events_for, :in => EVENT_RETENTION_SCHEDULES.map(&:last)
+  validates_inclusion_of :keep_events_for, :in => EVENT_RETENTION_SCHEDULES.map(&:last), message: "%{value} is not included in the list"
   validates :sources, owned_by: :user_id
   validates :receivers, owned_by: :user_id
   validates :controllers, owned_by: :user_id
