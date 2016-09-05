@@ -1,17 +1,17 @@
-<%= form_for([:admin, @user], html: { class: 'form-horizontal' }) do |f| %>
+<%= form_for([:admin, @user], html: {class: 'form-horizontal'}) do |f| %>
   <%= devise_error_messages! %>
-  <%= render partial: '/devise/registrations/common_registration_fields', locals: { f: f } %>
+  <%= render partial: '/devise/registrations/common_registration_fields', locals: {f: f} %>
 
-  <div class="form-group">
-    <div class="col-md-offset-4 col-md-10">
+  <div class="col-md-12">
+    <div class="form-group">
       <%= f.label :admin do %>
         <%= f.check_box :admin %> Admin
       <% end %>
     </div>
   </div>
 
-  <div class="form-group">
-    <div class="col-md-offset-4 col-md-10">
+  <div>
+    <div>
       <%= f.submit class: "btn btn-primary" %>
     </div>
   </div>
@@ -23,7 +23,7 @@
   <div class="col-md-12">
     <%= link_to icon_tag('glyphicon-chevron-left') + ' Back'.html_safe, admin_users_path, class: "btn btn-default" %>
     <% if @user.persisted? %>
-      <%= link_to 'Become User', switch_to_user_admin_user_path(@user), class: "btn btn-default btn-info", data: { confirm: 'This will log you in as another user. Would you like to continue?' } %>
+      <%= link_to 'Become User', switch_to_user_admin_user_path(@user), class: "btn btn-default btn-info", data: {confirm: 'This will log you in as another user. Would you like to continue?'} %>
     <% end %>
   </div>
 </div>

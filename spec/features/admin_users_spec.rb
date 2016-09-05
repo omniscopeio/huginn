@@ -32,7 +32,7 @@ describe Admin::UsersController do
       it "follow the 'new user' link" do
         visit admin_users_path
         click_on('New User')
-        expect(page).to have_text('Create new User')
+        expect(page).to have_text('Create New User')
       end
 
       it "creates a new user" do
