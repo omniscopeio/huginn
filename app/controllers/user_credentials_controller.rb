@@ -1,7 +1,5 @@
 class UserCredentialsController < ApplicationController
   include SortableTable
-  before_action :enforce_paid_plan!
-  
   def index
     set_table_sort sorts: %w[credential_name credential_value], default: { credential_name: :asc }
 

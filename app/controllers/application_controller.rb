@@ -25,10 +25,6 @@ class ApplicationController < ActionController::Base
     redirect_to(root_path, alert: 'Admin access required to view that page.') unless current_user && current_user.admin?
   end
   
-  def enforce_paid_plan!
-    redirect_to(pricing_path, flash: { warning: 'Please pick a plan first' }) unless current_user && current_user.subscription.present?
-  end
-
   def upgrade_warning
     return unless current_user
     twitter_oauth_check

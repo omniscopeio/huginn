@@ -1,7 +1,6 @@
 class LogsController < ApplicationController
   before_action :load_agent
-  before_action :enforce_paid_plan!
-  
+
   def index
     @logs = @agent.logs.all
     render :action => :index, :layout => false

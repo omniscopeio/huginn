@@ -49,7 +49,6 @@ describe "Creating a new agent", js: true do
   end
 
   it "allows to click on on the agent name in select2 tags" do
-    agent = agents(:bob_weather_agent)
     visit new_agent_path
     select2("Website Agent", from: "Type")
     select2("SF Weather", from: 'Sources')

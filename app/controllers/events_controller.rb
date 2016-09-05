@@ -1,7 +1,6 @@
 class EventsController < ApplicationController
   before_action :load_event, except: :index
-  before_action :enforce_paid_plan!
-  
+
   def index
     if params[:agent_id]
       @agent = current_user.agents.find(params[:agent_id])
