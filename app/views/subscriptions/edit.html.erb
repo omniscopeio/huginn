@@ -1,8 +1,8 @@
 <div class='container'>
   <% if params['update'] == 'card' %>
-    <%= render 'credit_card_form', title: "Update Your Payment Information", url: owner_subscription_path(@owner, @subscription) %>
+    <%= render 'credit_card_form', title: "Update Your Payment Information", url: subscription_path(@subscription) %>
   <% else %>
-    <h1>What Plan Is Best For You?</h1>
+    <h1>Pay-for-Performance</h1>
     <%= render 'pricing_table' %>
   <% end %>
 </div>

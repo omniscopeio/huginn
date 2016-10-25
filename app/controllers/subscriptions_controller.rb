@@ -7,7 +7,7 @@ class SubscriptionsController < ApplicationController
   def index
     # don't bother showing the index if they've already got a subscription.
     if current_user and current_user.subscription.present?
-      redirect_to edit_owner_subscription_path(current_user, current_user.subscription)
+      redirect_to edit_subscription_path(current_user.subscription)
     end
 
     # Don't prep a subscription unless a user is authenticated.
@@ -22,7 +22,7 @@ class SubscriptionsController < ApplicationController
   def new
     if no_owner?
       if current_user
-        redirect_to new_owner_subscription_path(current_user, plan: params[:plan])
+        redirect_to new_subscription_path(plan: params[:plan])
       else
         redirect_to_sign_up
       end
@@ -49,11 +49,11 @@ class SubscriptionsController < ApplicationController
   def show
   end
 
-  def cancel
+  def destroy
     flash[:notice] = "You've successfully cancelled your subscription."
     @subscription.plan_id = nil
     @subscription.save
-    redirect_to owner_subscription_path(@owner, @subscription)
+    redirect_to subscription(@subscription)
   end
 
   def edit
@@ -62,7 +62,7 @@ class SubscriptionsController < ApplicationController
   def update
     if @subscription.update_attributes(subscription_params)
       flash[:notice] = "You've successfully updated your subscription."
-      redirect_to owner_subscription_path(@owner, @subscription)
+      redirect_to subscription(@subscription)
     else
       flash[:error] = 'There was a problem processing this transaction.'
       render :edit
@@ -84,7 +84,7 @@ class SubscriptionsController < ApplicationController
     # this is a Devise default variable and thus should not change its name
     # when we change subscription owners from :user to :company
     session["user_return_to"] = new_subscription_path(plan: params[:plan])
-    redirect_to new_registration_path(Koudoku.subscriptions_owned_by.to_s)
+    redirect_to new_registration_path('user')
   end
 
   def load_owner
@@ -121,7 +121,7 @@ class SubscriptionsController < ApplicationController
 
   def show_existing_subscription
     if @owner.subscription.present?
-      redirect_to owner_subscription_path(@owner, @owner.subscription)
+      redirect_to subscription_path(@owner.subscription)
     end
   end
 
@@ -139,7 +139,7 @@ class SubscriptionsController < ApplicationController
 
   def after_new_subscription_path
     return super(@owner, @subscription) if defined?(super)
-    owner_subscription_path(@owner, @subscription)
+    subscription_path(@subscription)
   end
 
   def after_new_subscription_message

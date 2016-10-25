@@ -1,9 +1,6 @@
 require 'stripe_event'
 
 module Koudoku
-  mattr_accessor :subscriptions_owned_by
-  @@subscriptions_owned_by = nil
-  
   mattr_accessor :stripe_publishable_key
   @@stripe_publishable_key = nil
   
@@ -33,22 +30,22 @@ module Koudoku
   
   # e.g. :users
   def self.owner_resource
-    subscriptions_owned_by.to_s.pluralize.to_sym
+    :users
   end
   
   # e.g. :user_id
   def self.owner_id_sym
-    :"#{Koudoku.subscriptions_owned_by}_id"
+    :user_id
   end
   
   # e.g. :user=
   def self.owner_assignment_sym
-    :"#{Koudoku.subscriptions_owned_by}="
+    :user=
   end
 
   # e.g. User
   def self.owner_class
-    Koudoku.subscriptions_owned_by.to_s.classify.constantize
+    User
   end
 
   #

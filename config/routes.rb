@@ -2,18 +2,10 @@ Huginn::Application.routes.draw do
   
   get 'pricing' => 'subscriptions#index', as: 'pricing'
 
-  resources :subscriptions, only: [:new]
-  resources :owner do
-    resources :subscriptions do
-      member do
-        post :cancel
-      end
-    end
-  end
-
   mount StripeEvent::Engine => '/webhooks'
-  
+
   get '/.well-known/acme-challenge/:id' => 'ssl_verification#show'
+  resources :subscriptions, only: [:new, :create, :destroy]
 
   resources :agents do
     member do

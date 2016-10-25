@@ -28,4 +28,16 @@ describe SubscriptionsController do
       expect(assigns(:plans).map(&:stripe_id)).not_to include(inactive_plan.stripe_id)
     end
   end
+
+  describe "POST create" do
+    it "creates a new subscription and invoices for the specified services" do
+      sign_in users(:bob)
+
+      post :create, {
+
+      }
+      expect(users(:bob).subscriptions, :count).to change_by(1)
+
+    end
+  end
 end

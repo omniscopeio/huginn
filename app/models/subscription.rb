@@ -166,16 +166,12 @@ class Subscription < ActiveRecord::Base
     @coupon_code = new_code
   end
 
-  # Pretty sure this wouldn't conflict with anything someone would put in their model
   def subscription_owner
-    # Return whatever we belong to.
-    # If this object doesn't respond to 'name', please update owner_description.
-    send Koudoku.subscriptions_owned_by
+    self.user
   end
 
   def subscription_owner=(owner)
-    # e.g. @subscription.user = @owner
-    send Koudoku.owner_assignment_sym, owner
+    self.user = owner
   end
 
   def subscription_owner_description
