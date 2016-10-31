@@ -42,7 +42,6 @@ class CreateDefaultPlans < ActiveRecord::Migration
   private 
   class Plan < ActiveRecord::Base
     has_many :subscriptions
-    attr_accessible :name, :price, :interval, :stripe_id, :features, :display_order, :highlight
   end
   
   class Subscription < ActiveRecord::Base
