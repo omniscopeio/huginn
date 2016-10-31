@@ -35,7 +35,6 @@ class SubscriptionsController < ApplicationController
   def create
     @subscription = ::Subscription.new(subscription_params)
     @subscription.subscription_owner = @owner
-    @subscription.coupon_code = session[:koudoku_coupon_code]
 
     if @subscription.save
       flash[:notice] = after_new_subscription_message
@@ -126,15 +125,7 @@ class SubscriptionsController < ApplicationController
   end
 
   def subscription_params
-
-    # If strong_parameters is around, use that.
-    if defined?(ActionController::StrongParameters)
-      params.require(:subscription).permit(:plan_id, :stripe_id, :current_price, :credit_card_token, :card_type, :last_four)
-    else
-      # Otherwise, let's hope they're using attr_accessible to protect their models!
-      params[:subscription]
-    end
-
+    params.require(:subscription).permit(:plan_id, :stripe_id, :current_price, :credit_card_token, :card_type, :last_four)
   end
 
   def after_new_subscription_path

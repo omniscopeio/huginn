@@ -3,7 +3,6 @@ bob_subscription:
   stripe_id: cus_123doreymi
   plan: hobby_fast_11
   last_four: '1111'
-  coupon_id: 
   card_type: undefined
   current_price: 3.0
   
@@ -12,6 +11,5 @@ jane_subscription:
   stripe_id: cus_456youandme
   plan: hobby_fast_11
   last_four: '1111'
-  coupon_id: 
   card_type: undefined
   current_price: 3.0

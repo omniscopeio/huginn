@@ -1,9 +1,7 @@
 class Subscription < ActiveRecord::Base
   belongs_to :user
-  belongs_to :coupon
   belongs_to :plan
 
-  attr_accessible :user_id, :plan_id, :credit_card_token, :card_type, :last_four
   attr_accessor :credit_card_token
 
   before_destroy :cancel_subscription!
@@ -68,15 +66,6 @@ class Subscription < ActiveRecord::Base
               email: subscription_owner_email,
               card: credit_card_token # obtained with Stripe.js
             }
-
-            # If the class we're being included in supports coupons ..
-            if respond_to? :coupon
-              if coupon.present? and coupon.free_trial?
-                customer_attributes[:trial_end] = coupon.free_trial_ends.to_i
-              end
-            end
-
-            customer_attributes[:coupon] = @coupon_code if @coupon_code
 
             # create a customer at that package level.
             customer = Stripe::Customer.create(customer_attributes)
@@ -158,12 +147,6 @@ class Subscription < ActiveRecord::Base
         "Downgrade"
       end
     end
-  end
-
-  # Set a Stripe coupon code that will be used when a new Stripe customer (a.k.a. Koudoku subscription)
-  # is created
-  def coupon_code=(new_code)
-    @coupon_code = new_code
   end
 
   # Pretty sure this wouldn't conflict with anything someone would put in their model
