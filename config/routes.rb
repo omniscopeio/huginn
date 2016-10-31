@@ -1,5 +1,5 @@
 Huginn::Application.routes.draw do
-  
+  get '/.well-known/acme-challenge/:id' => 'lets_encrypt#show'
   get 'pricing' => 'subscriptions#index', as: 'pricing'
 
   resources :subscriptions, only: [:new]
