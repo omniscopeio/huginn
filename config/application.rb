@@ -42,7 +42,8 @@ module Huginn
     config.active_job.queue_adapter = :delayed_job
     
     config.to_prepare do
-      Koudoku::SubscriptionsController.skip_before_action :authenticate_user!, only: [:index, :new]
+      SubscriptionsController.skip_before_action :authenticate_user!, only: [:index, :new]
+      LetsEncryptController.skip_before_action :authenticate_user!, only: [:show]
     end
   end
 end
