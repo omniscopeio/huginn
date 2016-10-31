@@ -19,10 +19,8 @@ class Admin::UsersController < ApplicationController
   end
 
   def create
-    admin = params[:user].delete(:admin)
-    @user = User.new(params[:user])
+    @user = User.new(user_params)
     @user.requires_no_invitation_code!
-    @user.admin = admin
 
     respond_to do |format|
       if @user.save
@@ -40,10 +38,8 @@ class Admin::UsersController < ApplicationController
   end
 
   def update
-    admin = params[:user].delete(:admin)
-    params[:user].except!(:password, :password_confirmation) if params[:user][:password].blank?
-    @user.assign_attributes(params[:user])
-    @user.admin = admin
+    params[:user].extract!(:password, :password_confirmation) if params[:user][:password].blank?
+    @user.assign_attributes(user_params)
 
     respond_to do |format|
       if @user.save
@@ -88,7 +84,7 @@ class Admin::UsersController < ApplicationController
   def switch_to_user
     if current_user != @user
       old_user = current_user
-      sign_in(:user, @user, { bypass: true })
+      bypass_sign_in(@user)
       session[:original_admin_user_id] = old_user.id
     end
     redirect_to agents_path
@@ -96,7 +92,7 @@ class Admin::UsersController < ApplicationController
 
   def switch_back
     if session[:original_admin_user_id].present?
-      sign_in(:user, User.find(session[:original_admin_user_id]), { bypass: true })
+      bypass_sign_in(User.find(session[:original_admin_user_id]))
       session.delete(:original_admin_user_id)
     else
       redirect_to(root_path, alert: 'You must be an admin acting as a different user to do that.') and return
@@ -105,6 +101,10 @@ class Admin::UsersController < ApplicationController
   end
 
   private
+
+  def user_params
+    params.require(:user).permit(:email, :username, :password, :password_confirmation, :admin)
+  end
 
   def find_user
     @user = User.find(params[:id])
