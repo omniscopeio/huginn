@@ -27,6 +27,8 @@ module Agents
       * Alternatively, set `data_from_event` to a Liquid template to use data directly without fetching any URL.  (For example, set it to `{{ html }}` to use HTML contained in the `html` key of the incoming Event.)
       * If you specify `merge` for the `mode` option, Huginn will retain the old payload and update it with new values.
 
+      If a created Event has a key named `url` containing a relative URL, it is automatically resolved using the request URL as base.
+
       # Supported Document Types
 
       The `type` value can be `xml`, `html`, `json`, or `text`.
@@ -47,7 +49,7 @@ module Agents
 
       "@_attr_" is the XPath expression to extract the value of an attribute named _attr_ from a node, and `string(.)` gives a string with all the enclosed text nodes concatenated without entity escaping (such as `&amp;`). To extract the innerHTML, use `./node()`; and to extract the outer HTML, use `.`.
 
-      You can also use [XPath functions](http://www.w3.org/TR/xpath/#section-String-Functions) like `normalize-space` to strip and squeeze whitespace, `substring-after` to extract part of a text, and `translate` to remove commas from formatted numbers, etc.  Instead of passing `string(.)` to these functions, you can just pass `.` like `normalize-space(.)` and `translate(., ',', '')`.
+      You can also use [XPath functions](https://www.w3.org/TR/xpath/#section-String-Functions) like `normalize-space` to strip and squeeze whitespace, `substring-after` to extract part of a text, and `translate` to remove commas from formatted numbers, etc.  Instead of passing `string(.)` to these functions, you can just pass `.` like `normalize-space(.)` and `translate(., ',', '')`.
 
       Beware that when parsing an XML document (i.e. `type` is `xml`) using `xpath` expressions, all namespaces are stripped from the document unless the top-level option `use_namespaces` is set to `true`.
 
@@ -94,7 +96,12 @@ module Agents
 
       Set `uniqueness_look_back` to limit the number of events checked for uniqueness (typically for performance).  This defaults to the larger of #{UNIQUENESS_LOOK_BACK} or #{UNIQUENESS_FACTOR}x the number of detected received results.
 
-      Set `force_encoding` to an encoding name if the website is known to respond with a missing, invalid, or wrong charset in the Content-Type header.  Note that a text content without a charset is taken as encoded in UTF-8 (not ISO-8859-1).
+      Set `force_encoding` to an encoding name (such as `UTF-8` and `ISO-8859-1`) if the website is known to respond with a missing, invalid, or wrong charset in the Content-Type header.  Below are the steps used by Huginn to detect the encoding of fetched content:
+
+      1. If `force_encoding` is given, that value is used.
+      2. If the Content-Type header contains a charset parameter, that value is used.
+      3. When `type` is `html` or `xml`, Huginn checks for the presence of a BOM, XML declaration with attribute "encoding", or an HTML meta tag with charset information, and uses that if found.
+      4. Huginn falls back to UTF-8 (not ISO-8859-1).
 
       Set `user_agent` to a custom User-Agent name if the website does not like the default value (`#{default_user_agent}`).
 
@@ -106,9 +113,22 @@ module Agents
 
       Set `http_success_codes` to an array of status codes (e.g., `[404, 422]`) to treat HTTP response codes beyond 200 as successes.
 
+      If a `template` option is given, it is used as a Liquid template for each event created by this Agent, instead of directly emitting the results of extraction as events.  In the template, keys of extracted data can be interpolated, and some additional variables are also available as explained in the next section.  For example:
+
+          "template": {
+            "url": "{{ url }}",
+            "title": "{{ title }}",
+            "description": "{{ body_text }}",
+            "last_modified": "{{ _response_.headers.Last-Modified | date: '%FT%T' }}"
+          }
+
+      In the `on_change` mode, change is detected based on the resulted event payload after applying this option.  If you want to add some keys to each event but ignore any change in them, set `mode` to `all` and put a DeDuplicationAgent downstream.
+
       # Liquid Templating
 
-      In Liquid templating, the following variable is available:
+      In Liquid templating, the following variables are available except when invoked by `data_from_event`:
+
+      * `_url_`: The URL specified to fetch the content from.
 
       * `_response_`: A response object with the following keys:
 
@@ -116,17 +136,27 @@ module Agents
 
           * `headers`: Response headers; for example, `{{ _response_.headers.Content-Type }}` expands to the value of the Content-Type header.  Keys are insensitive to cases and -/_.
 
+          * `url`: The final URL of the fetched page, following redirects.  Using this in the `template` option, you can resolve relative URLs extracted from a document like `{{ link | to_uri: _request_.url }}` and `{{ content | rebase_hrefs: _request_.url }}`.
+
       # Ordering Events
 
       #{description_events_order}
     MD
 
     event_description do
-      "Events will have the following fields:\n\n    %s" % [
-        Utils.pretty_print(Hash[options['extract'].keys.map { |key|
-          [key, "..."]
-        }])
-      ]
+      if keys = event_keys
+        "Events will have the following fields:\n\n    %s" % [
+          Utils.pretty_print(Hash[event_keys.map { |key|
+                                    [key, "..."]
+                                  }])
+        ]
+      else
+        "Events will be the raw JSON returned by the URL."
+      end
+    end
+
+    def event_keys
+      (options['template'].presence || options['extract']).try(:keys)
     end
 
     def working?
@@ -136,7 +166,7 @@ module Agents
     def default_options
       {
           'expected_update_period_in_days' => "2",
-          'url' => "http://xkcd.com",
+          'url' => "https://xkcd.com",
           'type' => "html",
           'mode' => "on_change",
           'extract' => {
@@ -152,6 +182,7 @@ module Agents
       errors.add(:base, "either url, url_from_event, or data_from_event are required") unless options['url'].present? || options['url_from_event'].present? || options['data_from_event'].present?
       errors.add(:base, "expected_update_period_in_days is required") unless options['expected_update_period_in_days'].present?
       validate_extract_options!
+      validate_template_options!
       validate_http_success_codes!
 
       # Check for optional fields
@@ -276,6 +307,15 @@ module Agents
       end
     end
 
+    def validate_template_options!
+      template = options['template'].presence or return
+
+      unless Hash === template &&
+             template.each_pair.all? { |key, value| String === value }
+        errors.add(:base, 'template must be a hash of strings.')
+      end
+    end
+
     def check
       check_urls(interpolated['url'])
     end
@@ -300,11 +340,22 @@ module Agents
       raise "Failed: #{response.inspect}" unless consider_response_successful?(response)
 
       interpolation_context.stack {
+        interpolation_context['_url_'] = uri.to_s
         interpolation_context['_response_'] = ResponseDrop.new(response)
         handle_data(response.body, response.env[:url], existing_payload)
       }
     rescue => e
       error "Error when fetching url: #{e.message}\n#{e.backtrace.join("\n")}"
+    end
+
+    def default_encoding
+      case extraction_type
+      when 'html', 'xml'
+        # Let Nokogiri detect the encoding
+        nil
+      else
+        super
+      end
     end
 
     def handle_data(body, url, existing_payload)
@@ -328,19 +379,37 @@ module Agents
             extract_xml(doc)
         end
 
-      num_unique_lengths = interpolated['extract'].keys.map { |name| output[name].length }.uniq
-
-      if num_unique_lengths.length != 1
+      if output.each_value.each_cons(2).any? { |m, n| m.size != n.size }
         raise "Got an uneven number of matches for #{interpolated['name']}: #{interpolated['extract'].inspect}"
       end
 
-      old_events = previous_payloads num_unique_lengths.first
-      num_unique_lengths.first.times do |index|
-        result = {}
-        interpolated['extract'].keys.each do |name|
-          result[name] = output[name][index]
-          if name.to_s == 'url' && url.present?
-            result[name] = (url + Utils.normalize_uri(result[name])).to_s
+      num_tuples = output.each_value.first.size
+
+      old_events = previous_payloads num_tuples
+
+      template = options['template'].presence
+
+      num_tuples.times do |index|
+        extracted = {}
+        interpolated['extract'].each_key do |name|
+          extracted[name] = output[name][index]
+        end
+
+        result =
+          if template
+            interpolate_with(extracted) do
+              interpolate_options(template)
+            end
+          else
+            extracted
+          end
+
+        # url may be URI, string or nil
+        if (payload_url = result['url'].presence) && (url = url.presence)
+          begin
+            result['url'] = (Utils.normalize_uri(url) + Utils.normalize_uri(payload_url)).to_s
+          rescue URI::Error
+            error "Cannot resolve url: <#{payload_url}> on <#{url}>"
           end
         end
 
@@ -495,14 +564,7 @@ module Agents
         case nodes
         when Nokogiri::XML::NodeSet
           result = nodes.map { |node|
-            value = node.xpath(extraction_details['value'] || '.')
-            if value.is_a?(Nokogiri::XML::NodeSet)
-              child = value.first
-              if child && child.cdata?
-                value = child.text
-              end
-            end
-            case value
+            case value = node.xpath(extraction_details['value'] || '.')
             when Float
               # Node#xpath() returns any numeric value as float;
               # convert it to integer as appropriate.
@@ -551,6 +613,11 @@ module Agents
       # Integer value of HTTP status
       def status
         @object.status
+      end
+
+      # The URL
+      def url
+        @object.env.url.to_s
       end
     end
 
