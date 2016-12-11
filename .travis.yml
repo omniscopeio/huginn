@@ -43,11 +43,11 @@ script:
   - if [ -z "${DOCKER_IMAGE}" ]; then bundle exec rake db:create db:migrate; else true; fi
   - if [ -z "${DOCKER_IMAGE}" ]; then bundle exec rake $RSPEC_TASK; else ./build_docker_image.sh; fi
 notifications:
-  irc:
-    channels:
-    - chat.freenode.net#huginn
-    template:
-    - "<%{author}> %{branch} - %{commit} (%{commit_message}): %{message}"
-    - 'Change view : %{compare_url}'
-    - 'Build details : %{build_url}'
-  webhooks: https://coveralls.io/webhook?repo_token=COVERALLS_REPO_TOKEN
+#  irc:
+#    channels:
+#    - chat.freenode.net#huginn
+#    template:
+#    - "<%{author}> %{branch} - %{commit} (%{commit_message}): %{message}"
+#    - 'Change view : %{compare_url}'
+#    - 'Build details : %{build_url}'
+#  webhooks: https://coveralls.io/webhook?repo_token=COVERALLS_REPO_TOKEN
