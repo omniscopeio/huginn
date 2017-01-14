@@ -78,7 +78,7 @@
         <h3>Subscription</h3>
         <%  @subscription = current_user.subscription %>
         <% if @subscription.present? && @subscription.plan.present? %>
-          <p>You're currently subscribed to the <%= @subscription.plan.name %> plan at <%= plan_price(@subscription.plan) %>. <% if Plan.count > 1 %><%= link_to 'Choose Another Plan', edit_owner_subscription_path(current_user, @subscription) %><% end %></p>
+          <p>You're currently subscribed to the <%= @subscription.plan.name %> plan at <%= plan_price(@subscription.plan) %>. Your subscription will end on Feb 14th, 2017 when the site is closed for good. </p>
         <% else %>
           <p>You are not subscribed to a paid plan. <%= link_to 'Choose A Plan', pricing_path %></p>
         <% end %>

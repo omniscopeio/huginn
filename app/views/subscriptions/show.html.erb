@@ -2,8 +2,7 @@
   <% if @subscription.plan.present? %>
     <h2>You're Subscribed!</h2>
     <p>You're currently subscribed to the <%= @subscription.plan.name %> plan at <%= plan_price(@subscription.plan) %>.</p>
-    <%= link_to 'Choose Another Plan', edit_owner_subscription_path(@owner, @subscription), class: 'btn' %>
-    
+
   <% else %>
     <h2>No Subscription</h2>
     <p>You are not subscribed to a paid plan.</p>
